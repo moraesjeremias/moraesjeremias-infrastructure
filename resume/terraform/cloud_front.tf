@@ -4,20 +4,20 @@ module "resume_bucket_cloud_front_distribution" {
 
   create_origin_access_identity = true
   origin_access_identities = {
-    resume_s3_bucket = "OAI CloudFront to S3 Resume Bucket"
+    (var.cloudfront_origin) = var.origin_access_identity_name
   }
 
   origin = {
-    resume_s3_bucket = {
+    (var.cloudfront_origin) = {
       domain_name = aws_s3_bucket.resume_bucket.bucket_domain_name
       s3_origin_config = {
-        origin_access_identity = "resume_s3_bucket"
+        origin_access_identity = var.cloudfront_origin
       }
     }
   }
 
   default_cache_behavior = {
-    target_origin_id       = "resume_s3_bucket"
+    target_origin_id       = var.cloudfront_origin
     viewer_protocol_policy = "https-only"
 
     allowed_methods = ["GET", "HEAD", "OPTIONS"]
@@ -29,10 +29,12 @@ module "resume_bucket_cloud_front_distribution" {
     default_ttl     = "${60 * 60 * 120}"
   }
 
+    viewer_certificate = {
+    acm_certificate_arn = module.resume_acm.acm_certificate_arn
+    ssl_support_method  = var.ssl_method
+  }
+
   depends_on = [
     aws_s3_bucket.resume_bucket,
-    aws_s3_bucket_versioning.resume_bucket_versioning,
-    aws_s3_bucket_acl.resume_bucket_acl,
-    aws_s3_bucket_ownership_controls.resume_bucket_ownership
   ]
 }

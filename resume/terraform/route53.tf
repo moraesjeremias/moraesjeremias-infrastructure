@@ -3,8 +3,8 @@ module "personal_hosted_zone" {
   version = "2.6.0"
 
   zones = {
-    "moraesjeremias.com" = {
-      comment = "Jeremias' Moraes personal domain"
+    (var.domain_name) = {
+      comment = var.domain_name_comments
     }
   }
 
@@ -21,8 +21,8 @@ module "records" {
 
   records = [
     {
-      name = "resume"
-      type = "A"
+      name = var.subdomain
+      type = "CNAME"
       alias = {
         name    = module.resume_bucket_cloud_front_distribution.cloudfront_distribution_domain_name
         zone_id = module.resume_bucket_cloud_front_distribution.cloudfront_distribution_hosted_zone_id

@@ -36,3 +36,10 @@ resource "aws_s3_bucket_policy" "allow_access_from_public" {
     module.resume_bucket_cloud_front_distribution
   ]
 }
+
+resource "aws_s3_bucket_public_access_block" "block_public_policy" {
+  bucket = aws_s3_bucket.resume_bucket.id
+
+  block_public_acls   = true
+  block_public_policy = true
+}

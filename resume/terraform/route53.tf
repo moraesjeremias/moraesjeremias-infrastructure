@@ -22,7 +22,7 @@ module "records" {
   records = [
     {
       name = var.subdomain
-      type = "CNAME"
+      type = "A"
       alias = {
         name    = module.resume_bucket_cloud_front_distribution.cloudfront_distribution_domain_name
         zone_id = module.resume_bucket_cloud_front_distribution.cloudfront_distribution_hosted_zone_id

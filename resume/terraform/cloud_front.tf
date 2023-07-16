@@ -18,7 +18,7 @@ module "resume_bucket_cloud_front_distribution" {
 
   default_cache_behavior = {
     target_origin_id       = var.cloudfront_origin
-    viewer_protocol_policy = "https-only"
+    viewer_protocol_policy = "redirect-to-https"
 
     allowed_methods = ["GET", "HEAD", "OPTIONS"]
     cached_methods  = ["GET", "HEAD"]
